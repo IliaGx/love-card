@@ -2,9 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- تنظیم بسیار مهم برای موبایل -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Be My Valentine?</title>
-    <!-- اضافه کردن فونت Great Vibes برای حالت تحریری زیبا -->
     <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=MedievalSharp&family=Parisienne&family=Homemade+Apple&family=Poppins:wght@300;600&display=swap" rel="stylesheet">
     <style>
         :root {
@@ -25,7 +25,9 @@
         body {
             font-family: 'Poppins', sans-serif;
             background: radial-gradient(circle at center, var(--bg-center) 0%, var(--bg-edge) 100%);
-            height: 100vh;
+            /* استفاده از dvh برای پر کردن دقیق صفحه موبایل */
+            height: 100dvh; 
+            width: 100vw;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -33,6 +35,7 @@
             position: relative;
         }
 
+        /* نویز پس‌زمینه */
         body::before {
             content: "";
             position: absolute;
@@ -64,28 +67,28 @@
         @keyframes floatUp {
             0% { transform: translateY(0) scale(0.8); opacity: 0; }
             10% { opacity: 0.8; }
-            100% { transform: translateY(-110vh) scale(1.2); opacity: 0; }
+            100% { transform: translateY(-120vh) scale(1.2); opacity: 0; }
         }
 
-        /* --- Page 1: Question --- */
+        /* --- بخش سوال (صفحه اول) --- */
         .question-container {
             text-align: center;
             z-index: 10;
             display: flex;
             flex-direction: column;
             align-items: center;
+            width: 100%;
+            padding: 0 15px;
             transition: opacity 0.5s ease;
         }
 
         h1 {
-            /* تغییر فونت به تحریری (Cursive) */
             font-family: 'Great Vibes', cursive;
             color: var(--text-gold);
-            font-size: 5.5rem; /* سایز بزرگتر چون فونت‌های تحریری ظریف‌ترند */
+            font-size: 5.5rem; /* سایز دسکتاپ */
             margin-bottom: 30px;
             text-shadow: 0 4px 15px rgba(0,0,0,0.8);
-            padding: 0 20px;
-            letter-spacing: 2px;
+            line-height: 1.2;
             font-weight: normal;
         }
 
@@ -94,18 +97,22 @@
             gap: 30px;
             align-items: center;
             justify-content: center;
+            flex-wrap: wrap; /* در صورت نیاز دکمه‌ها می‌شکنند */
         }
 
         .btn {
             padding: 12px 45px;
-            font-size: 1.8rem; /* فونت دکمه‌ها کمی بزرگتر */
+            font-size: 1.8rem;
             border-radius: 50px;
             cursor: pointer;
             transition: all 0.3s ease;
             border: 2px solid #590d16;
-            /* فونت دکمه‌ها هم تحریری اما خوانا */
             font-family: 'Parisienne', cursive; 
             font-weight: bold;
+            /* جلوگیری از انتخاب متن دکمه در موبایل */
+            -webkit-user-select: none;
+            user-select: none;
+            touch-action: manipulation;
         }
 
         #yesBtn {
@@ -115,24 +122,13 @@
             border-color: #b31b31;
         }
 
-        #yesBtn:hover {
-            transform: scale(1.05);
-            background: linear-gradient(to bottom, #b31b31, #7a0e1d);
-            box-shadow: 0 8px 30px rgba(179, 27, 49, 0.6);
-        }
-
         #noBtn {
             background: rgba(0, 0, 0, 0.3);
             color: #bbb;
             border-color: #444;
         }
-        
-        #noBtn:hover {
-            background: rgba(255, 255, 255, 0.1);
-            color: #fff;
-        }
 
-        /* --- Page 2: Letter --- */
+        /* --- بخش نامه (صفحه دوم) --- */
         #successSection {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -140,6 +136,7 @@
             justify-content: center;
             align-items: center;
             z-index: 20;
+            padding: 20px;
         }
 
         .letter-paper {
@@ -148,11 +145,11 @@
                 radial-gradient(circle, transparent 50%, rgba(61, 8, 11, 0.2) 100%),
                 url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' opacity='0.15' filter='url(%23noise)'/%3E%3C/svg%3E");
             
-            height: auto;
-            min-height: 70vh;
-            max-height: 90vh;
-            width: 90%;
+            width: 100%;
             max-width: 650px;
+            /* ارتفاع اتوماتیک با محدودیت */
+            height: auto;
+            max-height: 85dvh; 
             
             border: 6px solid var(--border-color);
             outline: 2px solid #6b141d;
@@ -168,7 +165,19 @@
             padding: 40px;
             display: flex;
             flex-direction: column;
-            justify-content: center;
+            
+            /* اسکرول برای متن طولانی در موبایل */
+            overflow-y: auto;
+            -webkit-overflow-scrolling: touch; /* اسکرول نرم در آیفون */
+        }
+
+        /* مخفی کردن اسکرول بار زشت */
+        .letter-paper::-webkit-scrollbar {
+            width: 6px;
+        }
+        .letter-paper::-webkit-scrollbar-thumb {
+            background-color: rgba(61, 8, 11, 0.3);
+            border-radius: 4px;
         }
 
         .text-safe-zone {
@@ -178,9 +187,9 @@
             align-items: center;
             text-align: center;
             color: var(--blood-ink); 
+            margin: auto 0; /* مرکز قرار دادن عمودی محتوا */
         }
 
-        /* فونت نامه همچنان گوتیک و خوانا باقی ماند */
         .letter-header {
             font-family: 'MedievalSharp', cursive;
             font-size: 2.2rem;
@@ -204,6 +213,7 @@
             font-size: 1.5rem;
             margin-top: 30px;
             color: #590d16;
+            padding-bottom: 10px;
         }
 
         .ornament {
@@ -221,12 +231,59 @@
             to { opacity: 1; transform: scale(1) translateY(0); }
         }
 
-        @media (max-width: 600px) {
-            h1 { font-size: 3.5rem; }
-            .btn { padding: 12px 35px; font-size: 1.4rem; }
-            .letter-paper { width: 92vw; padding: 25px 15px; }
-            .letter-header { font-size: 1.6rem; }
-            .letter-body { font-size: 1.1rem; line-height: 1.6; }
+        /* --- تنظیمات مخصوص موبایل (Responsive) --- */
+        @media screen and (max-width: 768px) {
+            h1 {
+                font-size: 3.5rem; /* کوچکتر برای تبلت و موبایل */
+                margin-bottom: 40px;
+            }
+            .buttons {
+                gap: 20px;
+            }
+            .btn {
+                font-size: 1.5rem;
+                padding: 10px 30px;
+            }
+        }
+
+        @media screen and (max-width: 480px) {
+            h1 {
+                font-size: 3rem; /* مناسب برای صفحه گوشی کوچک */
+                padding: 0 10px;
+            }
+            
+            .buttons {
+                gap: 15px;
+                width: 100%;
+            }
+            
+            .btn {
+                padding: 10px 25px;
+                font-size: 1.3rem;
+                flex: 1; /* دکمه‌ها عرض یکسان می‌گیرند */
+                max-width: 140px; 
+            }
+
+            .letter-paper {
+                padding: 25px 15px; /* حاشیه کمتر در کاغذ */
+                width: 95%;
+                border-width: 4px;
+            }
+
+            .letter-header {
+                font-size: 1.6rem;
+                width: 100%;
+            }
+
+            .letter-body {
+                font-size: 1.1rem; /* متن کمی ریزتر برای جا شدن */
+                line-height: 1.6;
+            }
+            
+            .ornament {
+                font-size: 1.8rem;
+                margin: 5px 0;
+            }
         }
     </style>
 </head>
@@ -246,25 +303,25 @@
         <div class="letter-paper">
             <div class="text-safe-zone">
                 <div class="ornament">❦</div>
-                <div class="letter-header">My Dearest Love,</div>
+                <div class="letter-header">My Dearest Love,Zara</div>
                 
                 <div class="letter-body">
                     <p>
                         I knew within my soul that you would say Yes. 
-                        From the first moment I saw you, I was yours.
+                        From the first moment I saw you, I fell for you.
                     </p>
-                    <p>
+                    <p style="margin-top: 15px;">
                         I love you with all of my heart. 
                         Let every pain in this cursed world be mine, 
                         solely so you may live in happiness.
                     </p>
-                    <p>
+                    <p style="margin-top: 15px;">
                         I will always choose you.
                     </p>
                 </div>
 
                 <div class="letter-footer">
-                    Forever Yours <span style="color:#8f192b; font-size:1.2em">❤</span>
+                    Love u forever <span style="color:#8f192b; font-size:1.2em">❤</span>
                 </div>
                 <div class="ornament" style="transform: rotate(180deg);">❦</div>
             </div>
@@ -281,7 +338,8 @@
 
         let heartInterval;
         let yesScale = 1;
-        const noTexts = ["No", "Certain?", "Last chance", "My heart...", "Please?"];
+        // متن‌های دکمه No کوتاه شدند تا در موبایل بیرون نزنند
+        const noTexts = ["No", "Sure?", "Pls?", "Really?", "Broken?"]; 
         let count = 0;
 
         function startHearts(intervalTime) {
@@ -289,6 +347,7 @@
             heartInterval = setInterval(createHeart, intervalTime);
         }
 
+        // شروع قلب‌ها با سرعت ملایم
         startHearts(800);
 
         noBtn.addEventListener('click', () => {
@@ -302,27 +361,35 @@
             questionSection.style.display = 'none';
             successSection.classList.remove('hidden');
             triggerDarkRomanticConfetti();
-            startHearts(250);
+            startHearts(200); // افزایش سرعت قلب‌ها بعد از قبول کردن
         });
 
         function triggerDarkRomanticConfetti() {
-            const end = Date.now() + 3000;
+            // استفاده از کانفتی سازگار با موبایل
+            const duration = 3000;
+            const end = Date.now() + duration;
+
             (function frame() {
                 confetti({
-                    particleCount: 6,
+                    particleCount: 4, // تعداد کمتر برای روانی اجرا در موبایل
                     angle: 60,
                     spread: 55,
                     origin: { x: 0 },
-                    colors: ['#7a0e1d', '#d4af37', '#000000'] 
+                    colors: ['#7a0e1d', '#d4af37', '#000000'],
+                    disableForReducedMotion: true
                 });
                 confetti({
-                    particleCount: 6,
+                    particleCount: 4,
                     angle: 120,
                     spread: 55,
                     origin: { x: 1 },
-                    colors: ['#7a0e1d', '#d4af37', '#000000']
+                    colors: ['#7a0e1d', '#d4af37', '#000000'],
+                    disableForReducedMotion: true
                 });
-                if (Date.now() < end) requestAnimationFrame(frame);
+
+                if (Date.now() < end) {
+                    requestAnimationFrame(frame);
+                }
             }());
         }
 
@@ -331,12 +398,22 @@
             heart.classList.add('heart');
             heart.innerHTML = '❤';
             heart.style.left = Math.random() * 100 + '%';
+            
+            // رنگ‌های متنوع و زیبا
             const colors = ['#8f192b', '#590d16', '#a61c34', '#d4af37', '#c2185b']; 
             heart.style.color = colors[Math.floor(Math.random() * colors.length)];
-            heart.style.fontSize = Math.random() * 20 + 20 + 'px';
+            
+            // سایز رندوم، کمی کوچکتر برای موبایل
+            const size = Math.random() * 15 + 15; 
+            heart.style.fontSize = size + 'px';
+            
             heart.style.animationDuration = Math.random() * 3 + 4 + 's';
+            
             heartsContainer.appendChild(heart);
-            setTimeout(() => { heart.remove(); }, 7000);
+            
+            setTimeout(() => {
+                heart.remove();
+            }, 7000);
         }
     </script>
 </body>
